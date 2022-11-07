@@ -1,0 +1,40 @@
+version: '3.5'
+
+networks:
+  adoorei-network:
+    driver: bridge
+services:
+  adoorei-app:
+    build:
+      context: './.docker/php'
+    container_name: adoorei-app
+    environment:
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+    volumes:
+      - ./adoorei-checkout:/var/www/html/adoorei-checkout
+      - ./atendimento-wpp:/var/www/html/atendimento-wpp
+      - ./wppconnect-server:/var/www/html/wppconnect-server
+    ports:
+      - 80:80
+      - 443:443
+      - 21465:21465
+    networks:
+      - adoorei-network
+  adoorei-db:
+    image: mysql:5.7.40-debian
+    container_name: adoorei-db
+    volumes:
+      - db-volume:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=adoorei
+      - MYSQL_DATABASE=adoorei_db
+      - MYSQL_USER=adoorei
+      - MYSQL_PASSWORD=adoorei
+      - TZ=America/Sao_Paulo
+    networks:
+      - adoorei-network
+volumes:
+  db-volume:
