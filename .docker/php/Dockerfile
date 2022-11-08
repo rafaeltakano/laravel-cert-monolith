@@ -8,6 +8,8 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 RUN sudo apt install -y ./google-chrome-stable_current_amd64.deb
 
+RUN rm -rf ./google-chrome-stable_current_amd64.deb
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
