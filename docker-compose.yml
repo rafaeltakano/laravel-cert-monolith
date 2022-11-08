@@ -15,6 +15,7 @@ services:
       - ./adoorei-checkout:/var/www/html/adoorei-checkout
       - ./atendimento-wpp:/var/www/html/atendimento-wpp
       - ./wppconnect-server:/var/www/html/wppconnect-server
+      - ./.docker/xdebug/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
     ports:
       - 80:80
       - 443:443

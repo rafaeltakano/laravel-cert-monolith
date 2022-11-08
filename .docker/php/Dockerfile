@@ -18,6 +18,8 @@ RUN sed -ri 's/;date.timezone =/date.timezone = "America\/Sao_Paulo"/g' /usr/loc
 
 RUN docker-php-ext-install intl gd zip pdo_mysql
 
+RUN pecl install xdebug-3.1.5 && docker-php-ext-enable xdebug
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # nodejs
