@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 
 networks:
   adoorei-network:
@@ -6,7 +6,9 @@ networks:
 services:
   adoorei-app:
     build:
-      context: './.docker/php'
+      context: "./.docker/php"
+      args:
+        domain: ${APP_DOMAIN:-adooreisub}
     container_name: adoorei-app
     environment:
       - APACHE_RUN_USER=#1000
@@ -29,12 +31,12 @@ services:
     volumes:
       - db-volume:/var/lib/mysql
     ports:
-      - '3306:3306'
+      - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=adoorei
-      - MYSQL_DATABASE=adoorei_db
-      - MYSQL_USER=adoorei
-      - MYSQL_PASSWORD=adoorei
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-adoorei}
+      - MYSQL_DATABASE=${DB_DATABASE:-adoorei_db}
+      - MYSQL_USER=${DB_USERNAME:-adoorei}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-adoorei}
       - TZ=America/Sao_Paulo
     networks:
       - adoorei-network

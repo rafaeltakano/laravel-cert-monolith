@@ -102,6 +102,7 @@ WORKDIR /var/www/html
 USER adooreidev
 
 # create localhost certificate
+ARG domain
 RUN echo adooreidev | sudo -S openssl req -x509 -new -out /etc/ssl/certs/openssl.crt -keyout /etc/ssl/private/openssl.key -days 365 -newkey rsa:4096 -sha256 -nodes \
-  -subj "/C=BR/ST=Goias/L=Goiania/O=Adoorei/OU=IT/CN=adooreisub/emailAddress=rafael@adoorei.com"
+  -subj "/C=BR/ST=Goias/L=Goiania/O=Adoorei/OU=IT/CN=$domain/emailAddress=rafael@adoorei.com"
 RUN echo adooreidev | sudo -S chmod 777 -R /etc/ssl
