@@ -76,13 +76,13 @@ RUN bash nodesource_setup.sh
 RUN apt-get install -y nodejs
 RUN rm nodesource_setup.sh
 
-# conf for apache2 - adoorei-checkout
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/adoorei-checkout/public
+# conf for apache2 - company-checkout
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/company-checkout/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN a2enmod rewrite headers
 
-# conf for apache2 - adoorei-checkout w/ ssl
+# conf for apache2 - company-checkout w/ ssl
 RUN a2enmod ssl && a2enmod socache_shmcb
 RUN sed -ri '/SSLCertificateFile.*snakeoil\.pem/c\SSLCertificateFile \/etc\/ssl\/certs\/openssl.crt' /etc/apache2/sites-available/default-ssl.conf 
 RUN sed -ri '/SSLCertificateKeyFile.*snakeoil\.key/cSSLCertificateKeyFile /etc/ssl/private/openssl.key\' /etc/apache2/sites-available/default-ssl.conf
@@ -93,16 +93,16 @@ COPY ./apache/001-default.conf /etc/apache2/sites-available/001-default.conf
 COPY ./apache/apache2.conf /etc/apache2/apache2.conf
 RUN a2ensite 001-default.conf
 
-# create user adooreidev
-RUN useradd -G www-data,root -u 1000 -d /home/adooreidev adooreidev
-RUN mkdir -p /home/adooreidev/.composer && chown -R adooreidev:adooreidev /home/adooreidev
-RUN echo adooreidev:adooreidev | chpasswd adooreidev
-RUN usermod -aG sudo adooreidev
+# create user companydev
+RUN useradd -G www-data,root -u 1000 -d /home/companydev companydev
+RUN mkdir -p /home/companydev/.composer && chown -R companydev:companydev /home/companydev
+RUN echo companydev:companydev | chpasswd companydev
+RUN usermod -aG sudo companydev
 WORKDIR /var/www/html
-USER adooreidev
+USER companydev
 
 # create localhost certificate
 ARG domain
-RUN echo adooreidev | sudo -S openssl req -x509 -new -out /etc/ssl/certs/openssl.crt -keyout /etc/ssl/private/openssl.key -days 365 -newkey rsa:4096 -sha256 -nodes \
-  -subj "/C=BR/ST=Goias/L=Goiania/O=Adoorei/OU=IT/CN=$domain/emailAddress=rafael@adoorei.com"
-RUN echo adooreidev | sudo -S chmod 777 -R /etc/ssl
+RUN echo companydev | sudo -S openssl req -x509 -new -out /etc/ssl/certs/openssl.crt -keyout /etc/ssl/private/openssl.key -days 365 -newkey rsa:4096 -sha256 -nodes \
+  -subj "/C=BR/ST=Goias/L=Goiania/O=company/OU=IT/CN=$domain/emailAddress=rafael@company.com"
+RUN echo companydev | sudo -S chmod 777 -R /etc/ssl
