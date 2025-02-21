@@ -1,20 +1,20 @@
 version: "3.5"
 
 networks:
-  adoorei-network:
+  company-network:
     driver: bridge
 services:
-  adoorei-app:
+  company-app:
     build:
       context: "./.docker/php"
       args:
-        domain: ${APP_DOMAIN:-adooreisub}
-    container_name: adoorei-app
+        domain: ${APP_DOMAIN:-companysub}
+    container_name: company-app
     environment:
       - APACHE_RUN_USER=#1000
       - APACHE_RUN_GROUP=#1000
     volumes:
-      - ./adoorei-checkout:/var/www/html/adoorei-checkout
+      - ./company-checkout:/var/www/html/company-checkout
       - ./atendimento-wpp:/var/www/html/atendimento-wpp
       - ./wppconnect-server:/var/www/html/wppconnect-server
       - ./.docker/xdebug/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
@@ -24,21 +24,21 @@ services:
       - 21465:21465
       - 9002:9003
     networks:
-      - adoorei-network
-  adoorei-db:
+      - company-network
+  company-db:
     image: mysql:5.7.40-debian
-    container_name: adoorei-db
+    container_name: company-db
     volumes:
       - db-volume:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-adoorei}
-      - MYSQL_DATABASE=${DB_DATABASE:-adoorei_db}
-      - MYSQL_USER=${DB_USERNAME:-adoorei}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-adoorei}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-company}
+      - MYSQL_DATABASE=${DB_DATABASE:-company_db}
+      - MYSQL_USER=${DB_USERNAME:-company}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-company}
       - TZ=America/Sao_Paulo
     networks:
-      - adoorei-network
+      - company-network
 volumes:
   db-volume:
